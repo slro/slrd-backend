@@ -1,0 +1,10 @@
+# vi: set ft=yaml sw=2 :
+---
+- name: Update apt-cache of Ubuntu guest
+  apt:
+      update_cache: yes
+      cache_valid_time: 3600
+
+- name: Full update Ubuntu guest
+  apt:
+      upgrade: full

@@ -3,9 +3,6 @@
 - name: Configure SLRD backend application server for development environment
   hosts: all
 
-  vars:
-    requirements_path: /vagrant/requirements.txt
-
   remote_user: vagrant
   become: true
   become_method: sudo

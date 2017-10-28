@@ -1,0 +1,4 @@
+# vi: set ft=yaml sw=2 :
+---
+- name: Install Ansible modules dependencies
+  raw: sudo apt-get install -y aptitude

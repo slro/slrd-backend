@@ -3,3 +3,5 @@
 - include_tasks: "{{ item }}"
   with_items:
     - push_shell_config.yml
+    - install_ansible_deps.yml
+    - system_update.yml

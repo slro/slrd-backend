@@ -36,6 +36,7 @@ ANS_BP = ANS_PROPS['base_path'].freeze
 ANS_CM = ANS_PROPS['comp_mode'].freeze
 ANS_PB = ANS_PROPS['playbook'].freeze
 ANS_CFG = ANS_PROPS['config'].freeze
+ANS_REQ = ANS_PROPS['requirements_path'].freeze
 
 # on-call commands to execute
 ON_CALL_CMDS = VCONF['exec_on_call'].freeze

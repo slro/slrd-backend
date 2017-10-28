@@ -1,3 +1,4 @@
+# vi: set ft=yaml sw=2 :
 ---
 # base box and configuration version
 base_box: ubuntu/xenial64
@@ -14,8 +15,8 @@ vb_props:
 ansible_props:
     comp_mode: '2.0' # should be string
     base_path: /vagrant/ansible
-    playbook: /vagrant/ansible/vagrant_playbook.yml
     config: /vagrant/ansible/ansible.cfg
+    playbook: /vagrant/ansible/vagrant_playbook.yml
 
 # what ports to forward to host
 # <guest_port>: <to_host_port>
