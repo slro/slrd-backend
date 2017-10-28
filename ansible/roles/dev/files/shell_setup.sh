@@ -1,6 +1,6 @@
 # ddnomad-specific setup
 # remove if it bothers
-set -o vi
+# set -o vi
 bind -m vi-insert "\C-l":clear-screen
 
 # cd to a project folder and cleanup

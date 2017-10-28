@@ -2,5 +2,14 @@
 ---
 - name: Push shell setup script to a guest
   copy:
-      src: shell_setup.sh
-      dest: /etc/profile.d/shell_setup.sh
+    src: shell_setup.sh
+    dest: '{{ shell_conf_script_dir }}'
+    force: no
+
+- name: Set vi-style bindings if user is ddnomad
+  lineinfile:
+    dest: '{{ shell_conf_script_dir }}'
+    regexp: -o vi
+    line: 'set -o vi'
+  when:
+    - user == 'ddnomad'

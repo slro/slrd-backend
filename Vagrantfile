@@ -16,6 +16,9 @@
 
 require 'yaml' # to parse config file
 
+# get a username
+USER = `who | cut -f1 -d ' '`.strip.freeze
+
 # load configuration file and sub-sections
 VCONF = YAML.load_file('./vagrant.yml').freeze
 VB_PROPS = VCONF['vb_props'].freeze
@@ -63,6 +66,7 @@ Vagrant.configure(VC_VERSION) do |config|
     ansible.provisioning_path = ANS_BP
     ansible.playbook = ANS_PB
     ansible.config_file = ANS_CFG
+    ansible.extra_vars = { user: USER }
   end
 
   # forwarding ports

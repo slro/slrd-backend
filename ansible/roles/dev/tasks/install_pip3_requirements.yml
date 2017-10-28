@@ -1,0 +1,7 @@
+# vi: set ft=yaml sw=2 :
+---
+- name: Install pip3 requirements
+  pip:
+    chdir: '{{ guest_base_dir }}'
+    requirements: requirements.txt
+    executable: pip3

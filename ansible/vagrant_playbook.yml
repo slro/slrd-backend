@@ -3,6 +3,10 @@
 - name: Configure SLRD backend application server for development environment
   hosts: all
 
+  vars:
+    guest_base_dir: /vagrant
+    shell_conf_script_dir: /etc/profile.d/shell_setup.sh
+
   remote_user: vagrant
   become: true
   become_method: sudo

@@ -1,4 +1,11 @@
 # vi: set ft=yaml sw=2 :
 ---
-- name: Install Ansible modules dependencies
-  raw: sudo apt-get install -y aptitude
+- name: Check whether aptitude is installed
+  stat:
+    path: /usr/bin/aptitude
+  register: aptitude_executable
+
+- name: Install aptitude (Ansible apt module dependency)
+  shell: apt-get install -y aptitude
+  when:
+    aptitude_executable.stat.exists == False
