@@ -1,0 +1,6 @@
+# vi: set ft=yaml sw=2 :
+---
+- name: Push shell setup script to a guest
+  copy:
+      src: shell_setup.sh
+      dest: /etc/profile.d/shell_setup.sh

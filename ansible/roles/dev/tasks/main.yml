@@ -1,0 +1,5 @@
+# vi: set ft=yaml sw=2 :
+---
+- include_tasks: "{{ item }}"
+  with_items:
+    - push_shell_config.yml

@@ -1,0 +1,23 @@
+---
+# base box and configuration version
+base_box: ubuntu/xenial64
+vc_version: 2
+
+# Virtualbox properties
+vb_props:
+    name: ubuntu1604_slrd_backend
+    cpus: 2
+    cpu_cap: 100
+    ram: 4096
+
+# Ansible provisioning properties
+ansible_props:
+    comp_mode: '2.0' # should be string
+    base_path: /vagrant/ansible
+    playbook: /vagrant/ansible/vagrant_playbook.yml
+    config: /vagrant/ansible/ansible.cfg
+
+# what ports to forward to host
+# <guest_port>: <to_host_port>
+forward_ports:
+    8080: 8080  # flask

@@ -1,0 +1,13 @@
+# python rubbish
+__pycache__
+*.pyc
+
+# meta rubbish
+.vagrant
+
+# ansible rubbish
+*.retry
+
+# no logs but folder
+log/*
+!log/.keep
