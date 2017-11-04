@@ -1,0 +1,25 @@
+# Initial list of keys for storaging
+# users data and using them
+# to register automatically
+# on different services. 
+# ePassport data keys prototype.
+
+1. First Name
+2. Last Name
+3. Middle Name
+4. Patronym
+5. Birth Name
+6. Phone Number
+7. Email
+8. Postal Address
+	- Appartment, Building
+	- Street
+	- City
+	- Country
+	- Zip Code
+	- Additional Info
+9. Gender
+10. High School Info
+11. University Info
+12. Company Info
+13. Preferred Login
