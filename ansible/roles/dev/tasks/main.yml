@@ -7,3 +7,4 @@
     - system_update.yml
     - install_pip3.yml
     - install_pip3_requirements.yml
+    - install_nocache.yml

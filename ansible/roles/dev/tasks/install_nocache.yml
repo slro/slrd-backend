@@ -1,0 +1,6 @@
+# vi: set ft=yaml sw=2 :
+---
+- name: Install nocache
+  apt:
+    name: nocache
+    state: latest
