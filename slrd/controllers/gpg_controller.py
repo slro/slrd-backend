@@ -1,6 +1,13 @@
-"""This module contains a single class: GPGController.
+# -*- coding: utf-8 -*-
+# vi: set ft=python sw=4 :
+"""GPG interface controller.
 
-See GPGController class documentation for additional details.
+This module provides a way to encrypt and decrypt data with GPG using a
+single GPG key. All data is padded to the same length before being encrypted.
+The length can be specified on creation of GPGController class instance.
+
+Todo:
+    - implement methods
 """
 import gnupg
 
@@ -8,13 +15,16 @@ import gnupg
 class GPGController(object):
     """Encrypt and decrypt data with GnuPG."""
 
-    def __init__(self, gpg_key_id, pt_length):
+    def __init__(self, gpg_key_id, gpg_home_dir='~/.gnupg/', pt_length=1000):
         """Initialization method.
 
-        :param gpg_key_id: ID of GPG key to use for encryption/decryption
-        :param pt_length: length of a plain text block to feed to GPG (it will
-                          be padded to this length and rejected if it's longer)
+        :param gpg_key_id:   ID of GPG key to use for encryption/decryption
+        :param gpg_home_dir: path to GnuPG home directory
+        :param pt_length:    length of a plain text block to feed to GPG.
+                             Default is 1000.
+
         :type gpg_key_id: str
+        :type gpg_home_dir: str
         :type pt_length: int
 
         :raise: <???>
