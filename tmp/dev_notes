@@ -1,0 +1,3 @@
+- Documentation generator to use: Sphinx
+- Configure logger (just do it)
+- Enable linter (yes, YOU, non-vim guys)
