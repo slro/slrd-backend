@@ -10,6 +10,7 @@ Todo:
     - implement methods
 """
 import gnupg
+import logging
 
 
 class GPGController(object):
@@ -29,8 +30,13 @@ class GPGController(object):
 
         :raise: <???>
         """
+        self.logger = logging.getLogger(__name__)
+        self.logger.debug("initialization started")
+
         self.gpg_key_id = gpg_key_id
-        self.gpg = gnupg.GPG(gnupghome='???')
+        self.gpg = gnupg.GPG(gnupghome='???')  # TODO
+
+        self.logger.debug("initialization finished")
 
     def pad(self, data):
         """Pad data to the length equal to len(self.pt_length).
@@ -40,6 +46,8 @@ class GPGController(object):
 
         :return: padded data
         :rtype: str
+
+        :raise: <???>
         """
 
     def encrypt(self, data):

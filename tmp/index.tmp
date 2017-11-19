@@ -1,0 +1,29 @@
+# vi: set ft=yaml sw=2 :
+#
+# Temp index file
+
+- base_dir: <bdir>
+
+- linkfile_dir: <dir1>
+- keyfile_dir: <dir2>
+- valuefile_dir: <dir3>
+
+- keys:
+    <key>: <path_to_key_file>
+    ...
+- resource:
+    <site>: [
+      [ <linkfile_fname>, <timestamp>, <created_on> ],
+      ...
+    ]
+    ...
+- fakes:
+    <dir1>:
+      - <fname>
+        ...
+    <dir2>:
+      - <fname>
+        ...
+    <dir3>:
+      - <fname>
+        ...
