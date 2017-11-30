@@ -1,15 +1,28 @@
 # -*- coding: utf-8 -*-
 # vi: set ft=python sw=4 :
-""" """
+"""SLRD key data type module.
+
+Todo:
+    - docs
+    - implement
+"""
+from super_type import SuperType
 
 
-class KeyType(object):
-    """ """
+class KeyType(SuperType):
+    """SLRD key data type.
 
-    def __init__(self, yaml_str=None, **kwargs):
-        """ """
+    This data type stores references to corresponding value files.
+    """
 
-        if yaml_str:
-            self.__init__(**yaml.loads(yaml_str))
+    def __init__(self, raw_yaml=None, **kwargs):
+        """Initialization method.
 
+        :param raw_yaml:
+        :param kwargs:
 
+        :type raw_yaml:
+        :type kwargs:
+
+        :raise: <???>
+        """

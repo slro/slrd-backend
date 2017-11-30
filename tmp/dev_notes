@@ -1,2 +1,2 @@
 - Documentation generator to use: Sphinx
-- Configure logger (just do it)
+- Configure root logger (just do it)
