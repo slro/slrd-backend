@@ -11,6 +11,7 @@ Todo:
 """
 import gnupg
 import logging
+from slrd import comlogstr
 
 
 class GPGController(object):
@@ -31,12 +32,12 @@ class GPGController(object):
         :raise: <???>
         """
         self.logger = logging.getLogger(__name__)
-        self.logger.debug("initialization started")
+        self.logger.debug(comlogstr.LOG_INIT_START)
 
         self.gpg_key_id = gpg_key_id
         self.gpg = gnupg.GPG(gnupghome='???')  # TODO
 
-        self.logger.debug("initialization finished")
+        self.logger.debug(comlogstr.LOG_INIT_END)
 
     def pad(self, data):
         """Pad data to the length equal to len(self.pt_length).

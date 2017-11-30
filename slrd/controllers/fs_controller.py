@@ -10,10 +10,17 @@ Todo:
     - implement methods
 """
 import logging
+from os import makedirs
+from os.path import isdir, exists
+from slrd import comlogstr
+from slrd import SLRDFSBaseDirAllocationError
 
 
 class FSController(object):
     """Read, write and modify files in a file system."""
+
+    # would be very greatful if somebody formulated it in a less dumb way
+    ERRMSG_BDIR_NOT_DIR = "base directory path should be a directory: %s"
 
     def __init__(self, base_dir='~/.slrd/'):
         """Initialization method.
@@ -24,11 +31,17 @@ class FSController(object):
         :raise: <???>
         """
         self.logger = logging.getLogger(__name__)
-        self.logger.debug("initialization started")
+        self.logger.debug(comlogstr.LOG_INIT_START)
 
-        self.base_dir = base_dir
+        if not exists(base_dir):
+            makedirs(base_dir, #TODO)
+        elif not isdir(base_dir):
+            raise SLRDFSBaseDirAllocationError(
+                    self.ERRMSG_BDIR_NOT_DIR % base_dir
+                    )
 
-        self.logger.debug("initialization finished")
+
+        self.logger.debug(comlogstr.LOG_INIT_END)
 
     def write_to_file(self, data, path, timestamp, force=False):
         """Write data to a file located at a specified path.
