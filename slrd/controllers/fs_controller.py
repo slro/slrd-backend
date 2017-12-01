@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 # vi: set ft=python sw=4 :
-"""Write and read data files from a file system.
+"""Write and read files from a file system.
 
-This module provides an interface to read, write and modify data files from/to
-a file system.
+This module provides an interface to read, write and modify files from/to a
+file system.
 
 Todo:
     - finish docstrings
@@ -11,47 +11,101 @@ Todo:
 """
 import logging
 from os import makedirs
-from os.path import isdir, exists
+from os.path import isdir, isfile, islink, exists
 from slrd import comlogstr
-from slrd import SLRDFSBaseDirAllocationError
 
 
-# NOTE: (ddnomad)
-# > not sure we need this to be a class
-# > base_dir should be stored in settings/conf manager class
-# > and fs_controller do not care where to through files (read etc)
-# > so there is no need to store any state altogether
 class FSController(object):
-    """Read, write and modify data files in a file system."""
+    """Read, write and modify files in a file system."""
 
-    # would be very grateful if somebody formulated it in a less dumb way
-    ERRMSG_BDIR_NOT_DIR = "base directory path should be a directory: %s"
-    ERRMSG_BDIR_CRERROR = "failed to create a base directory: %s"
+    LOGSTR_MKDIR = 'created directory: %s, mode: %s'
 
-    def __init__(self, base_dir='~/.slrd/'):
-        """Initialization method.
-
-        :param base_dir: path to a directory that should be a data storage root
-        :type base_dir: str
-
-        :raise: <???>
-        """
+    def __init__(self):
+        """Initialization method."""
         self.logger = logging.getLogger(__name__)
         self.logger.debug(comlogstr.LOG_INIT_START)
-
-        if not exists(base_dir):
-            try:
-                # slightly not optimized move to increase verbosity
-                makedirs(base_dir, int('0700', 8))
-            except OSError as e:
-                raise SLRDFSBaseDirAllocationError(
-                        self.ERRMSG_BDIR_CRERROR % e)
-        elif not isdir(base_dir):
-            raise SLRDFSBaseDirAllocationError(
-                    self.ERRMSG_BDIR_NOT_DIR % base_dir)
-
-        self.base_dir = base_dir
         self.logger.debug(comlogstr.LOG_INIT_END)
+
+    def __it_exists(self, path, check_func):
+        """Implementation of *_exists functions.
+
+        :param path:       path to check an existence of
+        :param check_func: function to check with
+
+        :type path:       str
+        :type check_func: function
+
+        :return: result of a check
+        :rtype:  bool
+        """
+        result = check_func(path)
+        self.logger.debug(comlogstr.LOG_CHECK_RESULT %
+                          (check_func.__name__ + '(%s)' % path, result))
+        return result
+
+    def file_exists(self, path):
+        """Check whether a file exists.
+
+        :param path:         path to a file to check an existence of
+        :type path:          str
+
+        :return: result of a check
+        :rtype:  bool
+        """
+        return self.__it_exists(path, isfile)
+
+    def dir_exists(self, path):
+        """Check whether a directory exists.
+
+        :param path:         path to a directory to check an existence of
+        :type path:          str
+
+        :return: result of a check
+        :rtype:  bool
+        """
+        self.__it_exists(path, isdir)
+
+    def link_exists(self, path):
+        """Check whether a link exists.
+
+        :param path:         path to a link to check an existence of
+        :type path:          str
+
+        :return: result of a check
+        :rtype:  bool
+        """
+        self.__it_exists(path, islink)
+
+    def it_exists(self, path):
+        """Check whether path exists.
+
+        :param path:         path to check an existence of
+        :type path:          str
+
+        :return: result of a check
+        :rtype:  bool
+        """
+        self.__it_exists(path, exists)
+
+    def create_dir(self, path, mode):
+        """Create a directory.
+
+        :param path: path to a directory to create
+        :type path:  str
+
+        :raises: OSError
+        """
+        makedirs(path, int(mode, 8))
+        self.logger.info(self.LOGSTR_MKDIR % (path, mode))
+
+    def delete_dir(self, path):
+        """."""
+
+    def read_file(self, path):
+        """."""
+
+    def delete_file(self, path):
+        """."""
 
     def write_to_file(self, data, path, timestamp, force=False):
         """Write data to a file located at a specified path.
@@ -59,21 +113,3 @@ class FSController(object):
         Data is written NOT in a binary mode.
 
         """
-
-    def read_file(self, path):
-        """."""
-
-# NOTE (ddnomad)
-# > I'm not sure we need this method as it can be done in one line anyway.
-# > See __init__ from this class for an example
-#     def check_file_exists(self, path):
-#         """ """
-
-    def delete_file(self, path):
-        """."""
-
-    def create_dir(self, path):
-        """."""
-
-    def delete_dir(self, path):
-        """."""
