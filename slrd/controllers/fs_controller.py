@@ -13,8 +13,10 @@ import logging
 from os import makedirs
 from os.path import isdir, isfile, islink, exists
 from slrd.exceptions.common_exceptions import SLRDIllegalArgumentError
-from slrd.exceptions.controller_exceptions import SLRDFSCtrlCreateException
+from slrd.exceptions.controller_exceptions import SLRDFSCtrlCreateException, \
+                                                  SLRDFSCtrlRmException
 from slrd import comlogstr
+from shutil import rmtree
 
 
 class FSController(object):
@@ -22,7 +24,12 @@ class FSController(object):
 
     LOGSTR_MKDIR = 'created directory: %s, mode: %s'
     LOGSTR_MKDIR_MODE_ERR = 'can\'t cast mode argument to integer: %s'
-    ERRMSG_MKDIR_ERR = 'failed to create directory: %s, mode: %s'
+    LOGSTR_SYML_ATK_SUS = 'platform do not support fd-based functions: ' + \
+                          'symlink attack is possible'
+
+    ERRMSG_MKDIR_ERR = 'failed to create directory: %s with mode %s: %s'
+    ERRMSG_DELDIR_ERR = 'failed to remote subtree: %s: %s'
+    ERRMSG_DELDIR_NDIR = 'failed to remove subtree: %s: not a directory'
 
     def __init__(self):
         """Initialization method."""
@@ -112,7 +119,7 @@ class FSController(object):
             self.logger.critical(self.LOGSTR_MKDIR_MODE_ERR % mode)
             raise SLRDIllegalArgumentError(e)
         except OSError as e:
-            errmsg = self.ERRMSG_MKDIR_ERR % (path, mode)
+            errmsg = self.ERRMSG_MKDIR_ERR % (path, mode, e)
             self.logger.error(self.errmsg)
             raise SLRDFSCtrlCreateException(errmsg)
         self.logger.info(self.LOGSTR_MKDIR % (path, mode))
@@ -129,19 +136,31 @@ class FSController(object):
         :param path: path to a directory to delete
         :type path:  str
 
-        :raises: <???>
+        :raises: slrd.exceptions.controller_exceptions.SLRDFSCtrlRmException
         """
         if self.dir_exists(path):
-            pass  # TODO: delete it
+            if not rmtree.avoids_symlink_attacks:
+                self.logger.warning(self.LOGSTR_SYML_ATK_SUS)
+            try:
+                rmtree(path)
+            # flake8 complains that PermissionError do not exist but
+            # I do not want to register on GitLab to submit an issue
+            except (OSError, PermissionError) as e:
+                errmsg = self.ERRMSG_DELDIR_ERR % (path, e)
+                self.logger.error(errmsg)
+                raise SLRDFSCtrlRmException(errmsg)
         elif self.it_exists(path):
-            raise  # TODO: raise exception as it exists but is not a dir
-        # directory do not exist so nothing to do
+            errmsg = self.ERRMSG_DELDIR_NDIR % path
+            self.logger.error(errmsg)
+            raise SLRDFSCtrlCreateException(errmsg)
 
     def read_file(self, path):
         """."""
+        # TODO: implement
 
     def delete_file(self, path):
         """."""
+        # TODO: implement
 
     def write_to_file(self, data, path, timestamp, force=False):
         """Write data to a file located at a specified path.
@@ -149,9 +168,12 @@ class FSController(object):
         Data is written NOT in a binary mode.
 
         """
+        # TODO: implement
 
     def check_mode(self, path):
         """."""
+        # TODO: implement
 
     def match_mode_subtree(self, path, dir_mode, other_mode, fd_content=True):
         """."""
+        # TODO: implement

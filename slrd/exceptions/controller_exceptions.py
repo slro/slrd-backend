@@ -17,3 +17,7 @@ class SLRDFSCtrlCreateException(SLRDRuntimeException):
     For instance, FS controller failed to create a file in a system (folder,
     link etc).
     """
+
+
+class SLRDFSCtrlRmException(SLRDRuntimeException):
+    """SLRD file system controller failed to remote file(s)."""
