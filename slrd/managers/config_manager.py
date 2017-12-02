@@ -4,39 +4,43 @@
 import logging
 from slrd import comlogstr
 from slrd.controllers import fsctrl
+from slrd.exceptions.controller_exceptions import SLRDFSCtrlCreateException
+from slrd.exceptions.manager_exceptions import SLRDBaseDirAllocationError
 
 
 class ConfigManager(object):
     """."""
 
-    DEF_CONF = {
-            'base_dir_mode': '0700'
-    }
-
     ERRMSG_BDIR_NOT_DIR = "base directory path should be a directory: %s"
     ERRMSG_BDIR_CRERROR = "failed to create a base directory: %s"
 
-    def __init__(self, base_dir='~/.slrd/'):
+    def __init__(self, base_dir='~/.slrd/', base_dir_mode='0700'):
         """Initialization method.
 
-        :param base_dir: path to a directory that should be a data storage root
-        :type base_dir:  str
+        :param base_dir:      path to a directory that should be a data
+                              storage root
+        :param base_dir_mode: permissions mode to create a base directory with
+                              (*nix style like '0700')
 
-        :raise: <???>
+        :type base_dir:      str
+        :type base_dir_mode: str
+
+        :raise: slrd.exceptions.controller_exceptions.SLRDFSCtrlCreateException
+                slrd.exceptions.manager_exceptions.SLRDFSBaseDirAllocationError
         """
         self.logger = logging.getLogger(__name__)
         self.logger.debug(comlogstr.LOG_INIT_START)
         self.base_dir = base_dir
-        
+        self.base_dir_mode = base_dir_mode
         if not fsctrl.it_exists(base_dir):
             try:
-                # slightly not optimized move to increase verbosity
-                makedirs(base_dir, int('0700', 8))
-            except OSError as e:
-                raise SLRDFSBaseDirAllocationError(
+                fsctrl.create_dir(self.base_dir, self.base_dir_mode)
+            except SLRDFSCtrlCreateException as e:
+                raise SLRDBaseDirAllocationError(
                         self.ERRMSG_BDIR_CRERROR % e)
-        elif not isdir(base_dir):
-            raise SLRDFSBaseDirAllocationError(
+        # path exists but not a directory
+        elif not fsctrl.dir_exists(base_dir):
+            raise SLRDBaseDirAllocationError(
                     self.ERRMSG_BDIR_NOT_DIR % base_dir)
-
+        # TODO: put SLRD config file there or locate an existing one
         self.logger.debug(comlogstr.LOG_INIT_END)

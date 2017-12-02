@@ -12,6 +12,8 @@ Todo:
 import logging
 from os import makedirs
 from os.path import isdir, isfile, islink, exists
+from slrd.exceptions.common_exceptions import SLRDIllegalArgumentError
+from slrd.exceptions.controller_exceptions import SLRDFSCtrlCreateException
 from slrd import comlogstr
 
 
@@ -19,6 +21,8 @@ class FSController(object):
     """Read, write and modify files in a file system."""
 
     LOGSTR_MKDIR = 'created directory: %s, mode: %s'
+    LOGSTR_MKDIR_MODE_ERR = 'can\'t cast mode argument to integer: %s'
+    ERRMSG_MKDIR_ERR = 'failed to create directory: %s, mode: %s'
 
     def __init__(self):
         """Initialization method."""
@@ -91,11 +95,26 @@ class FSController(object):
         """Create a directory.
 
         :param path: path to a directory to create
-        :type path:  str
+        :param mode: permissions with which to create a directory (in *nix
+                     format, like 0700)
 
-        :raises: OSError
+        :type path: str
+        :type mode: str
+
+        :raises: slrd.exceptions.common_exceptions.SLRDIllegalArgumentError,
+                 slrd.exceptions.controller_exceptions.SLRDFSCtrlCreateException
         """
-        makedirs(path, int(mode, 8))
+        try:
+            makedirs(path, int(mode, 8))
+        except ValueError as e:
+            # would fail again if mode is not string
+            # (though everything went bananas anyway)
+            self.logger.critical(self.LOGSTR_MKDIR_MODE_ERR % mode)
+            raise SLRDIllegalArgumentError(e)
+        except OSError as e:
+            errmsg = self.ERRMSG_MKDIR_ERR % (path, mode)
+            self.logger.error(self.errmsg)
+            raise SLRDFSCtrlCreateException(errmsg)
         self.logger.info(self.LOGSTR_MKDIR % (path, mode))
 
     def delete_dir(self, path):
