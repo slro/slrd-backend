@@ -13,7 +13,7 @@ import logging
 from os import makedirs
 from os.path import isdir, isfile, islink, exists
 from slrd.exceptions import fsctrl_exceptions as ex
-from slrd import comlogstr
+from slrd.strings import comlogstr
 from shutil import rmtree
 
 

@@ -6,7 +6,9 @@ This module defines SLRD exceptions and errors that are raised in SLRD
 controllers (precisely, in slrd.controllers.* modules).
 
 Classes:
-    -
+    - SLRDFSCtrlCreateException
+    - SLRDFSCtrlRmException
+    - SLRDFSCtrlReadException
 """
 from slrd.exceptions import SLRDRuntimeException, SLRDImplementationError
 

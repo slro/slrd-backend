@@ -11,7 +11,7 @@ Todo:
 """
 import gnupg
 import logging
-from slrd import comlogstr
+from slrd.strings import comlogstr
 
 
 class GPGController(object):

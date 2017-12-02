@@ -2,12 +2,15 @@
 # vi: set ft=python sw=4 :
 """."""
 import logging
-from slrd import comlogstr
+from slrd.strings import comlogstr
 from slrd.controllers import fsctrl
+
+# bundle in slrd.exceptions.__init__.py and import in a single line
 from slrd.exceptions.controller_exceptions import SLRDFSCtrlCreateException
 from slrd.exceptions.manager_exceptions import SLRDBaseDirAllocationError
 
 
+# NOTE: TODO: might be a good idea to refactor to DataManager
 class ConfigManager(object):
     """."""
 

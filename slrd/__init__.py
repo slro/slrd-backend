@@ -1,5 +1,9 @@
+"""."""
 from flask import Flask
-from slrd.strings import comlogstr
+import logging
 
 slrd = Flask(__name__)
 from slrd.views import views
+
+
+logging.getLogger(__name__).addHandler(logging.NullHandler())
