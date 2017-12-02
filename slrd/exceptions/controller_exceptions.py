@@ -21,3 +21,7 @@ class SLRDFSCtrlCreateException(SLRDRuntimeException):
 
 class SLRDFSCtrlRmException(SLRDRuntimeException):
     """SLRD file system controller failed to remote file(s)."""
+
+
+class SLRDFSCtrlReadException(SLRDRuntimeException):
+    """SLRD file system controller failed to read a file."""

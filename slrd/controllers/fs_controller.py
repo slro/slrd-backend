@@ -12,9 +12,7 @@ Todo:
 import logging
 from os import makedirs
 from os.path import isdir, isfile, islink, exists
-from slrd.exceptions.common_exceptions import SLRDIllegalArgumentError
-from slrd.exceptions.controller_exceptions import SLRDFSCtrlCreateException, \
-                                                  SLRDFSCtrlRmException
+from slrd.exceptions import fsctrl_exceptions as ex
 from slrd import comlogstr
 from shutil import rmtree
 
@@ -117,11 +115,11 @@ class FSController(object):
             # would fail again if mode is not string
             # (though everything went bananas anyway)
             self.logger.critical(self.LOGSTR_MKDIR_MODE_ERR % mode)
-            raise SLRDIllegalArgumentError(e)
+            raise ex.SLRDIllegalArgumentError(e)
         except OSError as e:
             errmsg = self.ERRMSG_MKDIR_ERR % (path, mode, e)
             self.logger.error(self.errmsg)
-            raise SLRDFSCtrlCreateException(errmsg)
+            raise ex.SLRDFSCtrlCreateException(errmsg)
         self.logger.info(self.LOGSTR_MKDIR % (path, mode))
 
     def delete_dir(self, path):
@@ -148,15 +146,28 @@ class FSController(object):
             except (OSError, PermissionError) as e:
                 errmsg = self.ERRMSG_DELDIR_ERR % (path, e)
                 self.logger.error(errmsg)
-                raise SLRDFSCtrlRmException(errmsg)
+                raise ex.SLRDFSCtrlRmException(errmsg)
         elif self.it_exists(path):
             errmsg = self.ERRMSG_DELDIR_NDIR % path
             self.logger.error(errmsg)
-            raise SLRDFSCtrlCreateException(errmsg)
+            raise ex.SLRDFSCtrlCreateException(errmsg)
 
     def read_file(self, path):
-        """."""
-        # TODO: implement
+        """Read content of a text file.
+
+        :param path: path to a text file to read
+        :type path:  str
+
+        :return: content of a file
+        :rtype:  str
+
+        :raises: <???>
+        """
+        try:
+            with open(path) as f:
+                return f.read()
+        except (OSError, PermissionError) as e:
+            
 
     def delete_file(self, path):
         """."""
