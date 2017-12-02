@@ -11,8 +11,13 @@ from slrd.exceptions.manager_exceptions import SLRDBaseDirAllocationError
 class ConfigManager(object):
     """."""
 
-    ERRMSG_BDIR_NOT_DIR = "base directory path should be a directory: %s"
-    ERRMSG_BDIR_CRERROR = "failed to create a base directory: %s"
+    DEF_CONFIG = {}  # TODO: what should be there?
+
+    ERRMSG_BDIR_NOT_DIR = 'base directory path should be a directory: %s'
+    ERRMSG_BDIR_CRERROR = 'failed to create a base directory: %s'
+
+    LOGSTR_BDIR_NFOUND = 'no base directory detected; creating a fresh one'
+    LOGSTR_BDIR_NDIR = 'base directory is not a directory; can\'t proceed'
 
     def __init__(self, base_dir='~/.slrd/', base_dir_mode='0700'):
         """Initialization method.
@@ -34,13 +39,16 @@ class ConfigManager(object):
         self.base_dir_mode = base_dir_mode
         if not fsctrl.it_exists(base_dir):
             try:
+                self.logger.info(self.LOGSTR_BDIR_NFOUND)
                 fsctrl.create_dir(self.base_dir, self.base_dir_mode)
             except SLRDFSCtrlCreateException as e:
                 raise SLRDBaseDirAllocationError(
                         self.ERRMSG_BDIR_CRERROR % e)
         # path exists but not a directory
         elif not fsctrl.dir_exists(base_dir):
+            self.logger.critical(self.LOGSTR_BDIR_NDIR)
             raise SLRDBaseDirAllocationError(
                     self.ERRMSG_BDIR_NOT_DIR % base_dir)
+        elif # TODO: check mode of a directory; assert match self.base_dir_mode
         # TODO: put SLRD config file there or locate an existing one
         self.logger.debug(comlogstr.LOG_INIT_END)

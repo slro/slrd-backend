@@ -67,7 +67,7 @@ class FSController(object):
         :return: result of a check
         :rtype:  bool
         """
-        self.__it_exists(path, isdir)
+        return self.__it_exists(path, isdir)
 
     def link_exists(self, path):
         """Check whether a link exists.
@@ -78,7 +78,7 @@ class FSController(object):
         :return: result of a check
         :rtype:  bool
         """
-        self.__it_exists(path, islink)
+        return self.__it_exists(path, islink)
 
     def it_exists(self, path):
         """Check whether path exists.
@@ -89,7 +89,7 @@ class FSController(object):
         :return: result of a check
         :rtype:  bool
         """
-        self.__it_exists(path, exists)
+        return self.__it_exists(path, exists)
 
     def create_dir(self, path, mode):
         """Create a directory.
@@ -118,7 +118,24 @@ class FSController(object):
         self.logger.info(self.LOGSTR_MKDIR % (path, mode))
 
     def delete_dir(self, path):
-        """."""
+        """Delete a directory.
+
+        Remove the directory with all files in it (force, best-effort).
+
+        If directory do not exist the operation considered to be successful. If
+        an input path leads to something that is not a directory the exception
+        will be raised.
+
+        :param path: path to a directory to delete
+        :type path:  str
+
+        :raises: <???>
+        """
+        if self.dir_exists(path):
+            pass  # TODO: delete it
+        elif self.it_exists(path):
+            raise  # TODO: raise exception as it exists but is not a dir
+        # directory do not exist so nothing to do
 
     def read_file(self, path):
         """."""
@@ -132,3 +149,9 @@ class FSController(object):
         Data is written NOT in a binary mode.
 
         """
+
+    def check_mode(self, path):
+        """."""
+
+    def match_mode_subtree(self, path, dir_mode, other_mode, fd_content=True):
+        """."""
