@@ -41,6 +41,8 @@ class FSController(object):
     LOGSTR_MODE_WEIRD = 'permissions mode seems to be weird: %s'
     LOGSTR_NABS_PATHS = 'no absolute path enforcement: some functionality' + \
                         'might break with relative paths'
+    LOGSTR_WRITE_OK = 'written content to a file: %s, mode: %i, ts: %s, ' + \
+                      'bytes: %i'
 
     ERRMSG_UNSUP_FORMAT = 'unsupported load format passed : %s'
     ERRMSG_UNSUP_TYPE = 'unsupported delete type: %s: %s'
@@ -305,13 +307,13 @@ class FSController(object):
         :raises: slrd.exceptions.common_exceptions.SLRDIllegalArgumentError,
                  slrd.exceptions.controller_exceptions.SLRDFSCtrlReadException
         """
+        tc.check_types(str, *locals())
         if self.enforce_abspath:
             self.__enforce_absolute(path)
-        tc.check_types(str, *locals())
         try:
             with open(path) as f:
                 cont = f.read()
-                self.logger.debug(self.LOGSTR_RET_FILE % path)
+                self.logger.info(self.LOGSTR_RET_FILE % path)
                 return cont
         except (OSError, PermissionError) as e:
             errmsg = self.ERRMSG_READ_ERR % (path, e)
@@ -338,9 +340,9 @@ class FSController(object):
         :raises: slrd.exceptions.common_exceptions.SLRDIllegalArgumentError,
                  slrd.exceptions.controller_exceptions.SLRDFSCtrlReadException
         """
+        tc.check_types(str, str, *locals())
         if self.enforce_abspath:
             self.__enforce_absolute(path)
-        tc.check_types(str, str, *locals())
         if lformat not in self.SUPPORTED_LOAD_FORMATS:
             errmsg = self.ERRMSG_UNSUP_FORMAT % lformat
             self.logger.critical(errmsg)
@@ -348,7 +350,7 @@ class FSController(object):
         file_content = self.read_file(path)
         try:
             parsed_cont = import_module(lformat).loads(file_content)
-            self.logger.debug(self.LOGSTR_PARSE_FILE % (path, lformat))
+            self.logger.info(self.LOGSTR_PARSE_FILE % (path, lformat))
             return parsed_cont
         except Exception as e:
             errmsg = self.ERRMSG_READ_ERR % (path, e)
@@ -411,6 +413,8 @@ class FSController(object):
             with fdopen(osopen(path, flags=O_CREAT, mode=mode)) as f:
                 f.write(data)
                 utime(f.fileno(), times=(ts_seconds, ts_seconds))
+                self.logger.info(self.LOGSTR_WRITE_OK %
+                                 (path, oct(mode), timestamp, len(data)))
         except Exception as e:
             errmsg = self.ERRMSG_WRITE_FAIL % (type(e).__name__, e)
             self.logger.error(errmsg)
@@ -428,6 +432,7 @@ class FSController(object):
         :raises: slrd.exceptions.common_exceptions.SLRDIllegalArgumentError
                  slrd.exceptions.controller_exceptions.SLRDFSCtrlReadException
         """
+        tc.check_types(str, path)
         if self.enforce_abspath:
             self.__enforce_absolute(path)
         if not self.it_exists(path):
