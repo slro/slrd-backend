@@ -7,3 +7,4 @@ from slrd.views import views
 
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())
+type_checker = TypeChecker()  # all checks enabled
