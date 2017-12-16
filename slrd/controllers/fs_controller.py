@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # vi: set ft=python sw=4 :
+# developer: ddnomad
 """Write and read files from a file system.
 
 This module provides an interface to read, write and modify files from/to a
@@ -385,9 +386,9 @@ class FSController(object):
         :raises: slrd.exceptions.common_exceptions.SLRDIllegalArgumentError
                  slrd.exceptions.controller_exceptions.SLRDFSCtrlWriteException
         """
+        tc.check_types(str, str, int, bool, datetime, bool, *locals())
         if self.enforce_abspath:
             self.__enforce_absolute(path)
-        tc.check_types(str, str, int, bool, datetime, bool, *locals())
         f_exists = self.file_exists(path)
         if utime not in supports_fd:
             self.logger.critical(self.ERRMSG_NSUPP_FD)
