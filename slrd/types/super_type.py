@@ -35,7 +35,7 @@ class SuperType(object):
             raise #REALLY BAD (CAN'T PASS BOTH)
         if raw_yaml:
             try:
-                self.args = yaml.loads(raw_yaml)
+                self.args = yaml.load(raw_yaml)
             except:
                 raise # NOPE, not YAML actually
         else:
