@@ -13,9 +13,11 @@ class FSControllerExceptions(object):
     def __init__(self):
         """Initialization method."""
         self.SLRDIllegalArgumentError = SLRDIllegalArgumentError
+        self.SLRDUnsupportedSystemError = SLRDUnsupportedSystemError
         self.SLRDFSCtrlCreateException = SLRDFSCtrlCreateException
         self.SLRDFSCtrlRmException = SLRDFSCtrlRmException
         self.SLRDFSCtrlReadException = SLRDFSCtrlReadException
+        self.SLRDFSCtrlWriteException = SLRDFSCtrlWriteException
 
 
 logging.getLogger(__name__).addHandler(logging.NullHandler())

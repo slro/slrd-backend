@@ -10,3 +10,7 @@ from slrd.exceptions import SLRDRuntimeException, SLRDImplementationError
 
 class SLRDIllegalArgumentError(SLRDImplementationError):
     """Illegal argument was passed to a function/method."""
+
+
+class SLRDUnsupportedSystemError(XOPOSRuntimeException):
+    """Some system functionality prerequisites required are not satisfied."""

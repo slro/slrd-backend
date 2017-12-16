@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+# vi: set ft=python sw=4 :
 """."""
 import logging
 from slrd.controllers.fs_controller import FSController
