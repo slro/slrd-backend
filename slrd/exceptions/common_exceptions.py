@@ -12,5 +12,5 @@ class SLRDIllegalArgumentError(SLRDImplementationError):
     """Illegal argument was passed to a function/method."""
 
 
-class SLRDUnsupportedSystemError(XOPOSRuntimeException):
+class SLRDUnsupportedSystemError(SLRDRuntimeException):
     """Some system functionality prerequisites required are not satisfied."""

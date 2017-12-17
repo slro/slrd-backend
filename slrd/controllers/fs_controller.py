@@ -17,7 +17,7 @@ from importlib import import_module
 from os import makedirs, remove, fdopen, O_CREAT, lstat, utime, supports_fd
 from os import open as osopen
 from os.path import isdir, isfile, islink, exists
-from slrd import type_checker as tc
+from slrd.utils import type_checker as tc
 from slrd.exceptions import fsctrl_exceptions as ex
 from slrd.strings import comlogstr
 from shutil import rmtree
@@ -82,7 +82,6 @@ class FSController(object):
 
         :raises: slrd.exceptions.common_exceptions.SLRDIllegalArgumentError
         """
-        tc.check_types(str, *locals())
         if not path[0] == '/':
             errstr = self.ERRMSG_PATH_NABS % path
             self.logger.critical(errstr)
@@ -102,7 +101,6 @@ class FSController(object):
 
         :raises: slrd.exceptions.common_exceptions.SLRDIllegalArgumentError
         """
-        tc.check_types(int, *locals())
         if mode in range(0, 512):
             return True
         self.logger.warning(self.LOGSTR_MODE_WEIRD % oct(mode))
@@ -122,9 +120,9 @@ class FSController(object):
 
         :raises: slrd.exceptions.common_exceptions.SLRDIllegalArgumentError
         """
+        tc.check_types(str, callable, path, check_func)
         if self.enforce_abspath:
             self.__enforce_absolute(path)
-        tc.check_types(str, callable, *locals())
         result = check_func(path)
         self.logger.debug(comlogstr.LOG_CHECK_RESULT %
                           (check_func.__name__ + '(%s)' % path, result))
@@ -195,9 +193,9 @@ class FSController(object):
         :raises: slrd.exceptions.common_exceptions.SLRDIllegalArgumentError,
                  slrd.exceptions.controller_exceptions.SLRDFSCtrlCreateException
         """
+        tc.check_types(str, int, path, mode)
         if self.enforce_abspath:
             self.__enforce_absolute(path)
-        tc.check_types(str, int, *locals())
         d_exists = self.dir_exists(path)
         if d_exists:
             errmsg = self.ERRMSG_MKDIR_EXISTS % path
@@ -232,9 +230,9 @@ class FSController(object):
         :raises: slrd.exceptions.common_exceptions.SLRDIllegalArgumentError,
                  slrd.exceptions.controller_exceptions.SLRDFSCtrlRmException
         """
+        tc.check_types(str, callable, str, path, del_func, dtype)
         if self.enforce_abspath:
             self.__enforce_absolute(path)
-        tc.check_types(str, callable, str, *locals())
         dtype_up = dtype.upper()
         try:
             it_exists = getattr(self, '%s_exists' % dtype)
@@ -307,7 +305,7 @@ class FSController(object):
         :raises: slrd.exceptions.common_exceptions.SLRDIllegalArgumentError,
                  slrd.exceptions.controller_exceptions.SLRDFSCtrlReadException
         """
-        tc.check_types(str, *locals())
+        tc.check_types(str, path)
         if self.enforce_abspath:
             self.__enforce_absolute(path)
         try:
@@ -340,7 +338,7 @@ class FSController(object):
         :raises: slrd.exceptions.common_exceptions.SLRDIllegalArgumentError,
                  slrd.exceptions.controller_exceptions.SLRDFSCtrlReadException
         """
-        tc.check_types(str, str, *locals())
+        tc.check_types(str, str, path, lformat)
         if self.enforce_abspath:
             self.__enforce_absolute(path)
         if lformat not in self.SUPPORTED_LOAD_FORMATS:
@@ -388,7 +386,8 @@ class FSController(object):
         :raises: slrd.exceptions.common_exceptions.SLRDIllegalArgumentError
                  slrd.exceptions.controller_exceptions.SLRDFSCtrlWriteException
         """
-        tc.check_types(str, str, int, bool, datetime, bool, *locals())
+        tc.check_types(str, str, int, bool, datetime, bool, data, path, mode,
+                       inherit_mode, timestamp, force)
         if self.enforce_abspath:
             self.__enforce_absolute(path)
         f_exists = self.file_exists(path)

@@ -29,5 +29,5 @@ class SLRDFSCtrlReadException(SLRDRuntimeException):
     """SLRD file system controller failed to read a file."""
 
 
-class SLRDFSCtrlWriteException(XOPOSRuntimeException):
+class SLRDFSCtrlWriteException(SLRDRuntimeException):
     """XOPOS file system controller failed to write to a file."""

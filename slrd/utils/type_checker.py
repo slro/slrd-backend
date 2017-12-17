@@ -11,12 +11,15 @@ import slrd.typechecker as tc  # instantized in __init__.py
 
     def func(arg1, arg2, arg3):
         # make sure it's the first call
-        tc.check_types(str, str, int, **locals())
+        tc.check_types(str, str, int, arg1, arg2, arg3)
 ```
 
+To check whether an argument ins a function pass `callable` as a type.
+
 Todo:
-    - implement + docs
+    -
 """
+from inspect import isfunction, isbuiltin
 import logging
 from slrd.exceptions import SLRDIllegalArgumentError
 from slrd.strings import comlogstr
@@ -37,7 +40,7 @@ class TypeChecker(object):
     ERRSTR_TCLEN_ODD = 'amount of input parameters have to be even: got %i'
     ERRSTR_CHECK_FAIL = 'type check failed for: %s is %s'
 
-    def __init__(self, mode):
+    def __init__(self, mode='STRICT'):
         """Initialization method.
 
         :param mode: mode of operation of a type checker. For a possible modes
@@ -96,18 +99,22 @@ class TypeChecker(object):
             self.logger.info(
                     self.LOGSTR_TC_CALLED % self.mode_verb)
             args_len = len(args)
-            if not args_len % 2:
+            if args_len % 2 != 0:
                 errmsg = self.ERRSTR_TCLEN_ODD % args_len
                 self.logger.critical(errmsg)
                 raise SLRDIllegalArgumentError(errmsg)
-            for i in range(args_len):
-                arg = args[args_len + i]
+            half_args = args_len // 2
+            for i in range(half_args):
+                arg = args[half_args + i]
                 ttype = args[i]
-                if callable(ttype):
-                    check_res = ttype(arg)
-                else:
-                    check_res = isinstance(arg, ttype)
-                if not check_res:
+                try:
+                    if ttype.__name__ == 'callable':
+                        check_res = isfunction(arg) or isbuiltin(arg)
+                    else:
+                        check_res = isinstance(arg, ttype)
+                    if not check_res:
+                        raise Exception()
+                except Exception:
                     errmsg = self.ERRSTR_CHECK_FAIL % (str(arg), str(ttype))
                     self.logger.critical(errmsg)
                     raise SLRDIllegalArgumentError(errmsg)

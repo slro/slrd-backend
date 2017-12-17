@@ -36,7 +36,7 @@ class SLRDException(Exception):
         :param msg: message to print when being raised
         :type msg:  str
         """
-        super(type(self), self).__init__(msg)
+        super().__init__(msg)
 
 
 class SLRDRuntimeException(SLRDException):
