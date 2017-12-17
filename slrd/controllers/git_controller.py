@@ -5,6 +5,8 @@ GitContoller module
 """
 import logging
 from git import Repo
+from git.exc import InvalidGitRepositoryError
+from git.exc import RepositoryDirtyError
 from slrd.strings import comlogstr
 from slrd.strings import gitlogstr
 class GitController(object):
@@ -30,14 +32,14 @@ class GitController(object):
                 self.logger.info(gitlogstr.LOGSTR_SET_REPO_STARTED % path)
                 self.repo = Repo(path)
                 self.logger.debug(gitlogstr.LOGSTR_SET_REPO_SUCCESS % path)
-            except:
+            except InvalidGitRepositoryError:
                 self.logger.error(gitlogstr.LOGSTR_SET_REPO_ERROR)
             self.logger.info(gitlogstr.LOGSTR_SET_REPO_ENDED)
         else:
             try:
                 self.logger.info(gitlogstr.LOGSTR_INIT_STARTED % path)
                 self.repo = Repo.init(path, 'bare-repo', bare=True)
-                self.logger.debug(gitlogstr.LOGSTR_INIT_ENDED % path)          
+                self.logger.debug(gitlogstr.LOGSTR_INIT_ENDED % path)
             except:
                 self.logger.error(gitlogstr.LOGSTR_INIT_ERROR)
             self.logger.info(gitlogstr.LOGSTR_INIT_ENDED)
@@ -55,8 +57,15 @@ class GitController(object):
             self.logger.info(gitlogstr.LOGSTR_COMMIT_STARTED)
             self.repo.commit(commit_message)
             self.logger.info(gitlogstr.LOGSTR_COMMIT_SUCCESS)
-        except:
+        except RepositoryDirtyError:
             self.logger.error(gitlogstr.LOGSTR_ADD_ERROR)
+
+            '''
+            if the repository is dirty we add all untracked files using git add command
+            and execute commit once again
+            '''
+            self.__add()
+            self.commit(commit_message)
         self.logger.info(gitlogstr.LOGSTR_ADD_ENDED)
 
     def set_remote(self, url):
