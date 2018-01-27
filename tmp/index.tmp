@@ -11,7 +11,7 @@
 - keys:
     <key>: <path_to_key_file>
     ...
-- resource:
+- resources:
     <site>: [
       [ <linkfile_fname>, <timestamp>, <created_on> ],
       ...
