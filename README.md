@@ -1,5 +1,5 @@
-# SLRD
-> Early concept documentation
+# SLRD [WORK IN PROGRESS]
+> Early concept documentation. Nothing works just yet.
 ## General overview
 ### Description
 SLRD is a project that aims to provide a convenient and secure way of storing
