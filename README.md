@@ -62,13 +62,14 @@ Frontend and other plugins should be able to create their own template types.
 Linkfile created after user registered with template 1 from the previous
 section:
 ```
-template: <template_identification>  | TODO: open problem, how to specify?
+id: <random_value>  # 32 random bytes from /dev/urandom
+template: <template_name>  # value of a 'name' key in template file
 keys:
     first_name: John
     last_name: Rodgerson
     email: johnjohn@mealforfree.de
     password: cookies_for_free_meal_for_free
-created_on: <date_specification>     | TODO: how exactly? Time zones?
+created_on: dd.mm.yy hh:mm <Region>/<City>  # 02.02.2018 14:22 Africa/Accra
 notes: My main FB profile
 <
 any_other_optional_keys: ...
@@ -78,9 +79,9 @@ any_other_optional_keys: ...
 Just a random example of keyfile for a `first_name` key
 ```
 first_name:
-    - John: [list of linkfile ids]    |
-    - Dolori: [list of linkfile ids]  | => TODO: open problem
-    - Bob: [...]                      |
+    - John: [list of linkfile ids]
+    - Dolori: [list of linkfile ids]
+    - Bob: [...]
 ```
 Keyfiles also are capable of storing shortcut information:
 ```
@@ -91,5 +92,8 @@ sites:
 ```
 ### Things to consider
 * Make sure all queries are as fast as it's possible
-* Plugin system? Where to plug and what is to plub
+* Plugin system? Where to plug and what to plug
 * Fake files, updates and commits masking
+
+### Plugin system random notes
+* Custom template types
