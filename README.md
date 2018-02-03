@@ -90,10 +90,71 @@ sites:
     - stackexchange.com: [...]
     - ...
 ```
+### Store sketches
+```
+type: <plugin_name>.<type_defined_by_plugin>
+....
+(any KV data that can be exported to YAML)
+```
+### Modules etc
+* Controllers - low level operations do not involving any business logic
+    * `FSController`
+    * `GitController`
+    * `GPGController`
+* Models - OOP definitions of objects to manipulate with
+    * `Templates`
+    * `Linkfiles`
+    * `Keyfiles`
+    * `Store`? - used to store data by plugins
+
+## Random thoughts
+### Plugin ideas
+* Create new emails for user (actual emails with actual credentials)
+* Store pictures
+* Fetch templates from remote repository (resource)
+
 ### Things to consider
 * Make sure all queries are as fast as it's possible
 * Plugin system? Where to plug and what to plug
 * Fake files, updates and commits masking
 
-### Plugin system random notes
-* Custom template types
+### Plugin interaction with core
+* Core initialization
+* Search and load plugins
+* Poll plugins for supported types
+* Index core models (templates, keyfiles and linkfiles)
+* Index store model and group by type
+* Feed supported types to respective plugins
+* Allow plugins to write KV data to core index (as it's the only daemon)
+
+> NOTE: core provides individual KV store for all plugins. By default all KV
+> values of a particular plugin are kept private though plugin can export KV
+> as public.
+
+```
+Plugin():
+    # feed supported types to this plugin
+    def on_init(core_ind):
+        core_ind.insert(k, v, visibility)  # visibility:=Private|Public
+```
+
+### Plugin interaction with UI and core
+Plugins define their capability using triplets `keyword - callback_function -
+values_needed_with_types`. For example:
+```
+# For a notes plugin
+add - add_note() - {
+name: str
+content: str
+tags: [str, str, ...]
+}
+```
+Interface is responsible for gathering required data. After processing data
+plugin can return other data with specified types. For example:
+```
+status: created
+image: ./success.jpg
+etc: str
+```
+Interface is then again responsible for displaying the returned data in a
+meaningful way.
