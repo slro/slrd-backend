@@ -14,13 +14,12 @@ under VCS.
     the application
 * Browser plugins that help user to fill in the data online (Firefox, Chrome)
 * Online repository to store website-specific templates
-* External plugins support
 * Pluggable UIs
 * Plugins support
 ### Requirements (MVP)
 * CRUD
 * Support for multiple sites
-* Support for multiple profiles for an each site
+* Support for multiple profiles for each site
 * Provide a list of all sites where the user was registered and when (timeline)
 * Store any textual key-value data. Support storing information not connected
     to any site/online resource (notes etc).
